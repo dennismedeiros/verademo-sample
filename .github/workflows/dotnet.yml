@@ -18,10 +18,19 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+    
+    - name: GitHub Script
+      run: echo ${GITHUB_WORKSPACE}
+      
     - name: Restore dependencies
       run: dotnet restore
+    
     - name: Build
       run: dotnet build --no-restore
+    
+    - name: GitHub Script
+      run: echo ${GITHUB_WORKSPACE}
+    
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
@@ -32,7 +41,8 @@ jobs:
           path: /home/runner/work/verademo-sample/verademo-sample/bin/Debug/net6.0/verademo-sample.dll
           
     - name: GitHub Script
-      run: echo ${{env.GITHUB_ACTION_PATH}}
+      run: echo ${GITHUB_ACTION_PATH}
+    
       
   security_analysis:
     runs-on: windows-latest
