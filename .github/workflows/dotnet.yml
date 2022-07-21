@@ -32,7 +32,7 @@ jobs:
           path: /home/runner/work/verademo-sample/verademo-sample/bin/Debug/net6.0/verademo-sample.dll
           
     - name: GitHub Script
-      run: echo ${{GITHUB_ACTION_PATH}}
+      run: echo $GITHUB_ACTION_PATH
       
   security_analysis:
     runs-on: windows-latest
