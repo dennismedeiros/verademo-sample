@@ -29,7 +29,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: /home/runner/work/verademo-sample/verademo-sample/bin/Debug/net6.0/verademo-sample.dll
+          
+    - name: GitHub Script
+      run: echo ${{GITHUB_ACTION_PATH}}
       
   security_analysis:
     runs-on: windows-latest
