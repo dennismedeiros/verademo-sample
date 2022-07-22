@@ -41,13 +41,16 @@ jobs:
       run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
       
     - name: Compress Content
-      run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/ 
+      run: tar -czvf application.tar.gz --include=*.dll ${{github.workspace}}/bin/Debug/net6.0/ 
+      
+    - name: Verify Content
+      run: echo ${GITHUB_WORKSPACE} | ls -la
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
           name: .net-app
-          path: ${{github.workspace}}/bin/Debug/net6.0/application.tar.gz
+          path: ${{github.workspace}}/application.tar.gz
           
     
       
