@@ -55,7 +55,7 @@ jobs:
     
       
   security_analysis:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     
     steps:
       - name: GitHub Script
@@ -71,5 +71,10 @@ jobs:
           
       - name: GitHub Script
         run: ls -la
+        
+      - name: Verify Java
+        run: java
+        
+        
  
 
