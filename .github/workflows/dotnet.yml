@@ -40,18 +40,23 @@ jobs:
     - name: Build Produced
       run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
       
+    - name: Compress Content
+      run: tar -czvf application.tar.gz ${{github.workspace}}/bin/Debug/net6.0/ --exclude=*.json
+      
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
           name: .net-app
-          path: ${{github.workspace}}/bin/Debug/net6.0/
+          path: ${{github.workspace}}/bin/Debug/net6.0/application.tar.gz
+          
+    
       
   security_analysis:
     runs-on: windows-latest
     
     steps:
       - name: GitHub Script
-        run: echo ${GITHUB_ACTION_PATH}
+        run: pwd
     
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.0
@@ -59,7 +64,7 @@ jobs:
           # Artifact name
           name: .net-app
           # Destination path
-          path:  ${GITHUB_WORKSPACE}
+          path: ${{github.workspace}}
           
       - name: GitHub Script
         run: ls -la
