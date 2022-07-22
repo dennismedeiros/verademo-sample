@@ -80,7 +80,7 @@ jobs:
         run: ls -la
         
       - name: Verify Java
-        run: java --version
+        run: 'java --version'
         
         
  
