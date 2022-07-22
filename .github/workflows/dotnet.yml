@@ -41,7 +41,7 @@ jobs:
       run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
       
     - name: Compress Content
-      run: tar -czvf application.tar.gz ${{github.workspace}}/bin/Debug/net6.0/ --exclude=*.json
+      run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/ 
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
