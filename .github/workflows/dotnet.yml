@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: .net-app
-          path: $env:GITHUB_WORKSPACE/bin/Debug/net6.0/verademo-sample.dll
+          path: ${{GITHUB_WORKSPACE}}/bin/Debug/net6.0/verademo-sample.dll
       
   security_analysis:
     runs-on: windows-latest
