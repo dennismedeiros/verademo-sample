@@ -38,8 +38,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       
     - name: Build Produced
-      run: dir ${{github.workspace}}/bin/Debug/net6.0/
-      shell: pwsh
+      run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
