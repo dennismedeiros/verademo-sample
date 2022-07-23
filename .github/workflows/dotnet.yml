@@ -93,6 +93,10 @@ jobs:
         run: ls -la
       
       - name: Run Pipeline Scanner
-        run: java -Dpipeline.debug=true -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --file "application.zip" -jf verademo_results.json --fail_on_severity="Very High, High"
+        run: java -Dpipeline.debug=true -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --file "application.zip" -jf veracode-pipeline-results.json --fail_on_severity="Very High, High"
 
-      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v2
+        with:
+            name: veracode-pipeline-results.json
+            path: ${{github.workspace}}/verademo_results.json
