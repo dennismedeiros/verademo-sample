@@ -13,12 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Discovery
+        run: whoami
+    
       # Prepare environment
       - name: Preparing Environment
         run: |
-             apt-get update 
-             apt-get upgrade
-             apt-get install zip
+             sudo apt-get update 
+             sudo apt-get upgrade
+             sudo apt-get install zip
      
       - name: Envionmental Info
         run: env
