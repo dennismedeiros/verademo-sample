@@ -13,52 +13,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Envionmental Info
-      run: env
-    
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    
-    - name: GitHub Script
-      run: echo ${GITHUB_WORKSPACE}
-      
-    - name: Restore dependencies
-      run: dotnet restore
-    
-    - name: Build
-      run: dotnet build --no-restore
-    
-    - name: GitHub Script
-      run: echo ${GITHUB_WORKSPACE}
-    
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      
-    - name: Build Produced
-      run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
-      
-    - name: Compress Content
-      run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/*.*
-      
-    - name: Verify Content
-      run: echo ${GITHUB_WORKSPACE} | ls -la
-      
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-          name: .net-app
-          path: ${{github.workspace}}/application.tar.gz
+      # Prepare environment
+      - name: Preparing Environment
+        run: apt-get update | apt-get upgrade | apt-get install zip
+
+      - name: Envionmental Info
+        run: env
+
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: GitHub Script
+        run: echo ${GITHUB_WORKSPACE}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: GitHub Script
+        run: echo ${GITHUB_WORKSPACE}
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Build Produced
+        run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
+
+      - name: Compress Content
+        #run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/*.*
+        run: zip -r application.zip ${{github.workspace}}/bin/Debug/net6.0/ -x *.json
+
+      - name: Verify Content
+        run: echo ${GITHUB_WORKSPACE} | ls -la
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+            name: .net-app
+            path: ${{github.workspace}}/application.zip
           
-    
-      
   security_analysis:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    
+      # Prepare environment
+      - name: Preparing Environment
+        run: apt-get update | apt-get upgrade | apt-get install unzip
+      
       - name: Setup Java JDK
         uses: actions/setup-java@v3.4.1
         with:
@@ -66,7 +72,18 @@ jobs:
           java-version: '11'
           distribution: 'microsoft'
 
-      - name: GitHub Script
+      - name: Verify Java
+        run: 'java --version'
+
+      - name: Download the Pipeline Scanner
+        uses: wei/curl@master
+        with:
+          args: -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      
+      - name: Unzip the Pipeline Scanner
+        run: unzip pipeline-scan-LATEST.zip
+           
+      - name: Get Present Directory
         run: pwd
     
       - name: Download a Build Artifact
@@ -77,12 +94,10 @@ jobs:
           # Destination path
           path: ${{github.workspace}}
           
-      - name: GitHub Script
+      - name: Confirm Contents
         run: ls -la
-        
-      - name: Verify Java
-        run: 'java --version'
-        
-        
- 
+      
+      - name: Run Pipeline Scanner
+        run: java -Dpipeline.debug=true -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --file "application.zip" --fail_on_severity="Very High, High"
 
+      
