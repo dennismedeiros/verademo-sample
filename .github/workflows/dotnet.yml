@@ -15,8 +15,10 @@ jobs:
     steps:
       # Prepare environment
       - name: Preparing Environment
-        run: apt-get update | apt-get upgrade | apt-get install zip
-
+        run: apt-get update 
+             apt-get upgrade
+             apt-get install zip
+     
       - name: Envionmental Info
         run: env
 
