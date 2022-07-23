@@ -42,7 +42,9 @@ jobs:
 
       - name: Compress Content
         #run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/*.*
-        run: zip -r application.zip ${{github.workspace}}/bin/Debug/net6.0/*.* -x *.json
+        run: |
+          cd ${{github.workspace}}/bin/Debug/net6.0
+          zip -r ${{github.workspace}}/application.zip . -x *.json
 
       - name: Verify Content
         run: echo ${GITHUB_WORKSPACE} | ls -la
