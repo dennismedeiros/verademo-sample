@@ -61,10 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      # Prepare environment
-      - name: Preparing Environment
-        run: apt-get update | apt-get upgrade | apt-get install unzip
-      
+      # Prepare environment   
       - name: Setup Java JDK
         uses: actions/setup-java@v3.4.1
         with:
