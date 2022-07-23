@@ -13,16 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Discovery
-        run: whoami
-    
-      # Prepare environment
-      - name: Preparing Environment
-        run: |
-             sudo apt-get update 
-             sudo apt-get upgrade
-             sudo apt-get install zip
-     
       - name: Envionmental Info
         run: env
 
@@ -52,7 +42,7 @@ jobs:
 
       - name: Compress Content
         #run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/*.*
-        run: zip -r application.zip ${{github.workspace}}/bin/Debug/net6.0/ -x *.json
+        run: zip -r application.zip ${{github.workspace}}/bin/Debug/net6.0/*.* -x *.json
 
       - name: Verify Content
         run: echo ${GITHUB_WORKSPACE} | ls -la
