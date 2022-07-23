@@ -99,4 +99,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: veracode-pipeline-results.json
-            path: ${{github.workspace}}/verademo_results.json
+            path: ${{github.workspace}}/veracode-pipeline-results.json
