@@ -6,3 +6,10 @@ on:
 jobs: 
   call-build-workflow:
     uses: dmedeiros-veracode/verademo-sample/.github/workflows/verademo-sample-reusable-dotnet-build-linux-workflow.yml@master
+  call-security-workflow:
+    uses: dmedeiros-veracode/verademo-sample/.github/workflows/veracode-pipeline-linux-reusable-workflow.yml@master
+    with:
+        artifact-name: .net-app
+    secrets:
+        veracode-api-id: ${{ secrets.veracode-api-id }}
+        veracode-api-key: ${{ secrets.veracode-api-key }}
