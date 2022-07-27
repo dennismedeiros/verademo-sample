@@ -5,7 +5,7 @@ on:
   
 jobs: 
   call-workflow-passing-data:
-    uses: dmedeiros-veracode/verademo-sample/.github/workflows/workflow-B.yml@main
+    uses: dmedeiros-veracode/verademo-sample/.github/workflows/workflow-B.yml@master
     with:
       username: mona
     secrets:
