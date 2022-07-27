@@ -8,6 +8,7 @@ jobs:
     uses: dmedeiros-veracode/verademo-sample/.github/workflows/verademo-sample-reusable-dotnet-build-linux-workflow.yml@master
   call-security-workflow:
     uses: dmedeiros-veracode/verademo-sample/.github/workflows/veracode-pipeline-linux-reusable-workflow.yml@master
+    needs: call-build-workflow
     with:
         artifact-name: .net-app
     secrets:
