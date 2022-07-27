@@ -12,5 +12,5 @@ jobs:
     with:
         artifact-name: .net-app
     secrets:
-        veracode-api-id: ${{ secrets.VERCODE_API_ID }}
+        veracode-api-id: ${{ secrets.VERACODE_API_ID }}
         veracode-api-key: ${{ secrets.VERACODE_API_KEY }}
