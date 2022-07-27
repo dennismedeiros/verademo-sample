@@ -5,7 +5,7 @@ on:
   
 jobs: 
   call-workflow-passing-data:
-    uses: octo-org/example-repo/.github/workflows/reusable-workflow.yml@main
+    uses: dmedeiros-veracode/veracode-sample/.github/workflows/workflow-B.yml@main
     with:
       username: mona
     secrets:
