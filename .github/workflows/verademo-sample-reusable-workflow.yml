@@ -1,0 +1,12 @@
+name: Veracode Sample Workflow
+
+on:
+  workflow_dispatch:
+  
+jobs: 
+  call-workflow-passing-data:
+    uses: dmedeiros-veracode/verademo-sample/.github/workflows/workflow-B.yml@master
+    with:
+      username: mona
+    secrets:
+      veracode-api-id: ${{ secrets.veracode-api-id }}
