@@ -5,7 +5,7 @@ on:
   
 jobs: 
   call-build-workflow:
-    uses: dmedeiros-veracode/verademo-sample/.github/workflows/verademo-sample-reusable-dotnet-build-linux-workflow.yml@master
+    uses: dmedeiros-veracode/github-actions-verademo-sample/.github/workflows/verademo-sample-reusable-dotnet-build-linux-workflow.yml@master
   call-security-workflow:
     uses: dmedeiros-veracode/devops-github-actions-workflows/.github/workflows/veracode-sast-pipeline-linux-workflow.yml@main
     needs: call-build-workflow
