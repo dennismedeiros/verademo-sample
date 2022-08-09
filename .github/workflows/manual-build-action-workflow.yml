@@ -1,4 +1,4 @@
-name: Build and Test Application
+name: Manual Build and Test Application
 
 on:
   workflow_dispatch:
