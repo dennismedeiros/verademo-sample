@@ -1,0 +1,101 @@
+name: Scheduled Build and Test Workflow
+
+on:
+  workflow_dispatch:
+ 
+  schedule:
+    - cron: '8 15 * * *'  # every day at midnight
+  
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Envionmental Info
+        run: env
+
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: GitHub Script
+        run: echo ${GITHUB_WORKSPACE}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: GitHub Script
+        run: echo ${GITHUB_WORKSPACE}
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Build Produced
+        run: ls -la ${{github.workspace}}/bin/Debug/net6.0/
+
+      - name: Compress Content
+        #run: tar -czvf application.tar.gz --exclude=*.json ${{github.workspace}}/bin/Debug/net6.0/*.*
+        run: |
+          cd ${{github.workspace}}/bin/Debug/net6.0
+          zip -r ${{github.workspace}}/application.zip . -x *.json
+
+      - name: Verify Content
+        run: echo ${GITHUB_WORKSPACE} | ls -la
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+            name: .net-app
+            path: ${{github.workspace}}/application.zip
+          
+  sast_analysis:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # Prepare environment   
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.4.1
+        with:
+          # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
+          java-version: '11'
+          distribution: 'microsoft'
+
+      - name: Verify Java
+        run: 'java --version'
+
+      - name: Download the Pipeline Scanner
+        uses: wei/curl@master
+        with:
+          args: -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      
+      - name: Unzip the Pipeline Scanner
+        run: unzip pipeline-scan-LATEST.zip
+           
+      - name: Get Present Directory
+        run: pwd
+    
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          # Artifact name
+          name: .net-app
+          # Destination path
+          path: ${{github.workspace}}
+          
+      - name: Confirm Contents
+        run: ls -la
+      
+      - name: Run Pipeline Scanner
+        run: java -Dpipeline.debug=false -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --file "application.zip" -jf veracode-pipeline-results.json --fail_on_severity="Very High, High"
+
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v2
+        with:
+            name: veracode-pipeline-results.json
+            path: ${{github.workspace}}/veracode-pipeline-results.json
