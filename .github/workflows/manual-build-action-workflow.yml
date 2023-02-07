@@ -5,7 +5,6 @@ on:
   
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -15,6 +14,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
+        
         with:
           dotnet-version: 6.0.x
 
@@ -46,7 +46,7 @@ jobs:
         run: echo ${GITHUB_WORKSPACE} | ls -la
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.2
         with:
             name: .net-app
             path: ${{github.workspace}}/application.zip
@@ -65,20 +65,9 @@ jobs:
 
       - name: Verify Java
         run: 'java --version'
-
-      - name: Download the Pipeline Scanner
-        uses: wei/curl@master
-        with:
-          args: -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-      
-      - name: Unzip the Pipeline Scanner
-        run: unzip pipeline-scan-LATEST.zip
-           
-      - name: Get Present Directory
-        run: pwd
-    
+   
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.2
         with:
           # Artifact name
           name: .net-app
@@ -88,23 +77,60 @@ jobs:
       - name: Confirm Contents
         run: ls -la
       
-      - name: Run Pipeline Scanner
-        run: java -Dpipeline.debug=false -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --file "application.zip" -jf veracode-pipeline-results.json --fail_on_severity="Very High, High"
-
-      - name: Upload analysis results
-        uses: actions/upload-artifact@v2
+      - name: Veracode Upload And Scan
+        # You may pin to the exact commit or the version.
+        # uses: veracode/veracode-uploadandscan-action@35794dab9fbcd28fac19e44963f80646b27f4a7f
+        uses: veracode/veracode-uploadandscan-action@0.2.4
         with:
-            name: veracode-pipeline-results.json
-            path: ${{github.workspace}}/veracode-pipeline-results.json
+          # appname
+          appname: ${{ github.repository }}
+          # createprofile
+          createprofile: true
+          # filepath
+          #filepath: 
+          # version
+          version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+          # vid
+          vid: ${{secrets.VERACODE_API_ID}}
+          # vkey
+          vkey: ${{secrets.VERACODE_API_KEY}}
+          # true or false
+          createsandbox: true
+          # name of the sandbox
+          sandboxname: 'Release Candidate'
+          # wait X minutes for the scan to complete
+          #scantimeout: # optional
+          # modules to exclude from module selection
+          #exclude: # optional
+          # modules to include in module selection
+          #include: # optional
+          # business criticality - policy selection
+          #criticality: # optional
+          # filename pattern
+          pattern: '*.zip'
+          # replacement
+          #replacement: # optional
+          # specify to scan in a sandbox
+          #sandboxid: # optional
+          # All top level modules
+          #scanallnonfataltoplevelmodules: # optional
+          # platform selected modules
+          #selected: # optional
+          # selected modules like from previous scan
+          #selectedpreviously: # optional
+          # teams
+          #teams: # optional
+          # teams
+          #toplevel: # optional
+          # automatically delete the current scan if there are any errors when uploading files or starting the scan
+          #deleteincompletescan: # optional
+          # specify version of the Java API Wrapper; default is latest
+          #javawrapperversion: # optional
+          # show detailed diagnostic information, which you can use for debugging, in the output.
+          #debug: # optional
 
-    
-    
-    
-    
-    
-    
-    
-    
+
+
     
     
     
