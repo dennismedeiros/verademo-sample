@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: GitHub Script
-        run: echo ${GITHUB_WORKSPACE}
+        run: echo ${GITHUB_REPOSITORY#*/}
 
       - name: Restore dependencies
         run: dotnet restore
@@ -27,7 +27,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: GitHub Script
-        run: echo  ${{github.repository.name}}
+        run: echo  ${{github.repository#*/}}
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
@@ -54,7 +54,7 @@ jobs:
     uses: dmedeiros-veracode/github-actions-devops-workflows/.github/workflows/veracode-sast-platform-rc-linux-workflow.yml@main
     needs: build
     with:
-        profile-name: verademo-net-github-actions
+        profile-name: ${{github.repository#*/}}
         artifact-name: .net-app
     secrets:
         veracode-api-id: ${{ secrets.VERACODE_API_ID }}
