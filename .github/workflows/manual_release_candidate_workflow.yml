@@ -54,7 +54,7 @@ jobs:
     uses: dmedeiros-veracode/github-actions-devops-workflows/.github/workflows/veracode-sast-platform-rc-linux-workflow.yml@main
     needs: build
     with:
-        profile-name: ${{github.repository.name}}
+        profile-name: verademo-net-github-actions
         artifact-name: .net-app
     secrets:
         veracode-api-id: ${{ secrets.VERACODE_API_ID }}
