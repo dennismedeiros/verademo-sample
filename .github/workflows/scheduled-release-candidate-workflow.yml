@@ -21,7 +21,7 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: GitHub Script
-        run: echo ${GITHUB_WORKSPACE}
+        run: echo ${GITHUB_REPOSITORY#*/}
 
       - name: Restore dependencies
         run: dotnet restore
@@ -30,7 +30,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: GitHub Script
-        run: echo ${GITHUB_WORKSPACE}
+        run: echo  ${GITHUB_REPOSITORY#*/}
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
@@ -43,12 +43,11 @@ jobs:
         run: |
           cd ${{github.workspace}}/bin/Debug/net6.0
           zip -r ${{github.workspace}}/application.zip . -x *.json
-
       - name: Verify Content
         run: echo ${GITHUB_WORKSPACE} | ls -la
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.2
         with:
             name: .net-app
             path: ${{github.workspace}}/application.zip
@@ -57,6 +56,7 @@ jobs:
     uses: dmedeiros-veracode/github-actions-devops-workflows/.github/workflows/veracode-sast-platform-rc-linux-workflow.yml@main
     needs: build
     with:
+        profile-name: ${GITHUB_REPOSITORY#*/}
         artifact-name: .net-app
     secrets:
         veracode-api-id: ${{ secrets.VERACODE_API_ID }}
