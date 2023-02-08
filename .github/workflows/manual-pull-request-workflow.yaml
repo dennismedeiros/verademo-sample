@@ -124,11 +124,11 @@ jobs:
           # Enter true to show the JSON containing the scan results on the console. Default is false.
           #json_display: # optional
           # Enter true to display detailed messages in the scan results. Default is false.
-          #verbose: true
+          verbose: true
           # Enter true to save the scan results as a human-readable file. Default is false.
-          summary_output: "veracode-pipeline-results.json"
+          summary_output: true
           # Enter the filename of the scan results summary file. The file is stored in the current directory. Default is results.txt.
-          #summary_output_file: # optional
+          summary_output_file: "veracode-pipeline-results.json"
           # Enter true to save the scan results in JSON format. Default is true.
           #json_output: # optional
           # Rename the JSON file that contains the scan results. The file is stored in the current directory. Default filename is results.json.
@@ -146,7 +146,7 @@ jobs:
           # Enter one these values, which are case-sensitive, for the type of development stage: Development, Testing, Release.
           #development_stage: # optional
           # Enable debug mode. 1 for on
-          debug: true
+          debug: 1
           # Enable the storage of a baseline file. Takes true or fales
           #store_baseline_file: # optional
           # Enter the branch name where the baseline file should be stored
