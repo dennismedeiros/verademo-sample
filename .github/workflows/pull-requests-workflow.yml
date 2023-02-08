@@ -55,7 +55,7 @@ jobs:
         run: echo ${GITHUB_WORKSPACE} | ls -la
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.2
         with:
             name: .net-app
             path: ${{github.workspace}}/application.zip
