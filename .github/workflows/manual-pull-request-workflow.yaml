@@ -126,9 +126,9 @@ jobs:
           # Enter true to display detailed messages in the scan results. Default is false.
           verbose: true
           # Enter true to save the scan results as a human-readable file. Default is false.
-          summary_output: true
+          #summary_output: true
           # Enter the filename of the scan results summary file. The file is stored in the current directory. Default is results.txt.
-          summary_output_file: "veracode-pipeline-results.json"
+          #summary_output_file: "veracode-pipeline-results.json"
           # Enter true to save the scan results in JSON format. Default is true.
           #json_output: # optional
           # Rename the JSON file that contains the scan results. The file is stored in the current directory. Default filename is results.json.
