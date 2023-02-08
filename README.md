@@ -1,4 +1,3 @@
-[![Scheduled Release Candidate Workflow](https://github.com/dmedeiros-veracode/github-actions-verademo-sample/actions/workflows/scheduled-release-candidate-workflow.yml/badge.svg?branch=main)](https://github.com/dmedeiros-veracode/github-actions-verademo-sample/actions/workflows/scheduled-release-candidate-workflow.yml)
 
 # Github Actions Verademo Sample
 A sample applicaiton to demonstrate the use of GitHub Actions to build and analysis with Veracode tools.
