@@ -1,4 +1,4 @@
-name: Pull Request Build and Test Workflow
+name: Manual Pull Request Test Workflow
 
 on:
   workflow_dispatch:
